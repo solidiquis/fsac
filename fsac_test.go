@@ -62,10 +62,10 @@ func e(err string, t *testing.T) {
 	t.Error(err)
 }
 
-func fsacSetup() *search {
+func fsacSetup() *fsac {
 	prompt := "Directory: "
 	done := make(chan string, 1)
-	fsac := InitSearch(prompt, done)
+	fsac := InitFsac(prompt, done)
 	fsac.SetItems([]string{
 		"cthulhu",
 		"nyarlathotep",
