@@ -1,3 +1,13 @@
+// Installation:
+// go get github.com/solidiquis/fsac/cmd/dirf
+
+// Name:
+// dirf -> (dir)ectory (f)ind
+
+// Utility:
+// Searches through directory tree from working directory and
+// copies selection to clipboard.
+
 package main
 
 import (
@@ -55,7 +65,7 @@ func main() {
 	go ansi.GetChar(stdin)
 
 	done := make(chan string, 1)
-	search := fsac.InitSearch("Directory", done)
+	search := fsac.InitFsac("Directory", done)
 
 	itemsSet := make(chan bool, 1)
 	go func() {

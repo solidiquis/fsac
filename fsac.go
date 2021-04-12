@@ -17,8 +17,8 @@ const (
 )
 
 // Struct that encapsulates everything necessary to render fsac.
-// Struct is unexported, meant to be instantiated with InitSearch.
-type search struct {
+// Struct is unexported, meant to be instantiated with InitFsac.
+type fsac struct {
 	// Text preceding user input.
 	Prompt string
 
@@ -28,7 +28,7 @@ type search struct {
 	// Item in Items that is most similar to Value.
 	Guess string
 
-	// List of items to search through.
+	// List of items to fsac through.
 	Items []string
 
 	// Match objects ordered by most similar to Value to least similar.
@@ -49,21 +49,21 @@ type search struct {
 	doneChan chan string
 }
 
-// Clears window, records window dimensions, prints prompt, and instantiates search.
-func InitSearch(promptTxt string, done chan string) *search {
+// Clears window, records window dimensions, prints prompt, and instantiates fsac.
+func InitFsac(promptTxt string, done chan string) *fsac {
 	ansi.EraseScreen()
 	ansi.CursorHome()
 
 	winCol, winRow, err := ansi.TerminalDimensions()
 	if err != nil {
-		log.Fatalln("Unable to retrieve window dimensions.")
+		log.Fatalln("Unable to retrieve window dimensionf.")
 	}
 
 	prompt := fmt.Sprintf("%s: ", promptTxt)
 
 	fmt.Print(ansi.Bright(prompt))
 
-	return &search{
+	return &fsac{
 		Prompt:   prompt,
 		Value:    "",
 		Guess:    "",
@@ -77,92 +77,92 @@ func InitSearch(promptTxt string, done chan string) *search {
 }
 
 // Main handler for rendering behavior.
-func (s *search) Render(key string) {
+func (f *fsac) Render(key string) {
 	var scrolling bool
 
 	switch key {
 	case "<Enter>":
-		s.doneChan <- s.makeSelection()
+		f.doneChan <- f.makeSelection()
 		return
 	case "<Backspace>":
-		s.backspace()
+		f.backspace()
 	case "<Up>":
-		s.decSelected()
+		f.decSelected()
 		scrolling = true
 	case "<Down>":
-		s.incSelected()
+		f.incSelected()
 		scrolling = true
 	case "\t":
-		s.autocomplete()
+		f.autocomplete()
 	case "<Left>", "<Right>", "<ESC>":
 		return
 	default:
-		s.printChar(key)
+		f.printChar(key)
 	}
 
 	// If items not set, no autocomplete and list render.
-	if len(s.Items) < 1 {
+	if len(f.Items) < 1 {
 		return
 	}
 
-	// Autocomplete goodness.
+	// Autocomplete goodnesf.
 	var prediction string
 
-	if match := fuzzy.Find(s.Value, s.Items); len(match) > 0 {
+	if match := fuzzy.Find(f.Value, f.Items); len(match) > 0 {
 		prediction = match[0].Str
-		s.Matches = match
+		f.Matches = match
 	} else {
-		s.Matches = nil
+		f.Matches = nil
 	}
 
 	if !scrolling {
-		s.Selected = 0
+		f.Selected = 0
 	}
 
 	if len(prediction) > 0 {
-		s.printGuess(prediction)
+		f.printGuess(prediction)
 	} else {
-		s.Guess = ""
+		f.Guess = ""
 	}
 
-	s.RenderMatches()
+	f.RenderMatches()
 }
 
-// Simple setter for setting list of items. Items are not set in the InitSearch
+// Simple setter for setting list of items. Items are not set in the InitFsac
 // func in case the preparing of said items is a slow operation. By setting the
 // items separately, say, in a goroutine, this allows the application to display
 // the prompt immediately without being blocked.
-func (s *search) SetItems(items []string) {
-	s.Items = items
+func (f *fsac) SetItems(items []string) {
+	f.Items = items
 }
 
 // Renders a list of all the potential items that match user input, taking into
 // account the window dimesions, using a sliding window to handle overflow.
-func (s *search) RenderMatches() {
+func (f *fsac) RenderMatches() {
 	ansi.CursorSavePos()
 	ansi.CursorHome()
 	ansi.CursorDownStartLn(2)
 
-	frameLen := s.WinRow + s.Selected - WIN_MARGIN_BTM
+	frameLen := f.WinRow + f.Selected - WIN_MARGIN_BTM
 
-	if len(s.Matches) > 0 {
-		for i := s.Selected; i < frameLen; i++ {
-			if i >= len(s.Matches) {
+	if len(f.Matches) > 0 {
+		for i := f.Selected; i < frameLen; i++ {
+			if i >= len(f.Matches) {
 				ansi.EraseLine()
 				ansi.CursorDownStartLn(1)
 				continue
 			}
 
-			item := s.Matches[i].Str
+			item := f.Matches[i].Str
 
-			if len(item)+len(LIST_OFFSET) >= s.WinCol {
-				item = s.truncate(item)
+			if len(item)+len(LIST_OFFSET) >= f.WinCol {
+				item = f.truncate(item)
 			}
 
 			ansi.EraseLine()
 
-			if i == s.Selected {
-				fmt.Println(s.focus(item))
+			if i == f.Selected {
+				fmt.Println(f.focus(item))
 				continue
 			}
 			fmt.Println(LIST_OFFSET, item)
@@ -172,23 +172,23 @@ func (s *search) RenderMatches() {
 		return
 	}
 
-	for i := s.Selected; i < frameLen; i++ {
-		if i >= len(s.Items) {
+	for i := f.Selected; i < frameLen; i++ {
+		if i >= len(f.Items) {
 			ansi.EraseLine()
 			ansi.CursorDownStartLn(1)
 			continue
 		}
 
-		item := s.Items[i]
+		item := f.Items[i]
 
-		if len(item)+len(LIST_OFFSET) >= s.WinCol {
-			item = s.truncate(item)
+		if len(item)+len(LIST_OFFSET) >= f.WinCol {
+			item = f.truncate(item)
 		}
 
 		ansi.EraseLine()
 
-		if i == s.Selected {
-			fmt.Println(s.focus(item))
+		if i == f.Selected {
+			fmt.Println(f.focus(item))
 			continue
 		}
 		fmt.Println("  ", item)
@@ -200,76 +200,76 @@ func (s *search) RenderMatches() {
 /* PRIVATE */
 
 // Truncates and prepends '...' to matches that overflow to next line.
-func (s *search) truncate(item string) string {
-	overflowAmnt := len(LIST_OFFSET) + len(item) - s.WinCol
+func (f *fsac) truncate(item string) string {
+	overflowAmnt := len(LIST_OFFSET) + len(item) - f.WinCol
 	truncatedStr := item[overflowAmnt+4:]
 	return fmt.Sprintf("...%s", truncatedStr)
 
 }
 
 // Increments Selected field for proper RenderMatches behavior.
-func (s *search) incSelected() {
-	if len(s.Matches) > 0 {
-		if s.Selected+1 >= len(s.Matches) {
+func (f *fsac) incSelected() {
+	if len(f.Matches) > 0 {
+		if f.Selected+1 >= len(f.Matches) {
 			return
 		}
 
-		s.Selected++
+		f.Selected++
 	} else {
-		if s.Selected+1 >= len(s.Items) {
+		if f.Selected+1 >= len(f.Items) {
 			return
 		}
 
-		s.Selected++
+		f.Selected++
 	}
 }
 
 // Decrements Selected field for proper RenderMatches behavior.
-func (s *search) decSelected() {
-	if len(s.Matches) > 0 {
-		if s.Selected-1 < 0 {
+func (f *fsac) decSelected() {
+	if len(f.Matches) > 0 {
+		if f.Selected-1 < 0 {
 			return
 		}
 
-		s.Selected--
+		f.Selected--
 	} else {
-		if s.Selected-1 < 0 {
+		if f.Selected-1 < 0 {
 			return
 		}
 
-		s.Selected--
+		f.Selected--
 	}
 }
 
 // Returns a highlighted string to represent that the item is focused on.
-func (s *search) focus(item string) string {
+func (f *fsac) focus(item string) string {
 	return fmt.Sprintf(" %s %s", ansi.FgBlue("\u25B6"), ansi.FgMagenta(item))
 }
 
 // Used to determine whether or not user input with/without autocomplete
 // will overflow onto the next line.
-func (s *search) lnOverflow() bool {
-	return len(s.Prompt)+len(s.Guess) > s.WinCol || len(s.Prompt)+len(s.Value) > s.WinCol
+func (f *fsac) lnOverflow() bool {
+	return len(f.Prompt)+len(f.Guess) > f.WinCol || len(f.Prompt)+len(f.Value) > f.WinCol
 }
 
-// Handler for Tab press, prints the predicted text and set the Value to Guess.
-func (s *search) autocomplete() {
-	if len(s.Guess) < 1 {
+// Handler for Tab press, prints the predicted text and set the Value to Guesf.
+func (f *fsac) autocomplete() {
+	if len(f.Guess) < 1 {
 		return
 	}
-	ansi.CursorSetPos(s.StartRow, s.StartCol)
-	fmt.Print(s.Guess)
+	ansi.CursorSetPos(f.StartRow, f.StartCol)
+	fmt.Print(f.Guess)
 	ansi.EraseToEndln()
-	s.Value = s.Guess
+	f.Value = f.Guess
 }
 
 // Handler for backpacing.
-func (s *search) backspace() {
-	if len(s.Value) < 1 {
+func (f *fsac) backspace() {
+	if len(f.Value) < 1 {
 		return
 	}
 
-	if s.lnOverflow() {
+	if f.lnOverflow() {
 		ansi.CursorSavePos()
 		ansi.CursorDown(1)
 		ansi.EraseLine()
@@ -277,29 +277,29 @@ func (s *search) backspace() {
 	}
 	ansi.EraseToEndln()
 	ansi.Backspace()
-	s.Value = s.Value[:len(s.Value)-1]
+	f.Value = f.Value[:len(f.Value)-1]
 }
 
 // Handler for printing normal input.
-func (s *search) printChar(ch string) {
-	s.Value += ch
+func (f *fsac) printChar(ch string) {
+	f.Value += ch
 	fmt.Print(ch)
 }
 
 // Prints the predicted text as dim text.
-func (s *search) printGuess(prediction string) {
-	s.Guess = prediction
+func (f *fsac) printGuess(prediction string) {
+	f.Guess = prediction
 	ansi.CursorSavePos()
 	ansi.EraseToEndln()
-	fmt.Print(ansi.Dim(prediction[len(s.Value):]))
+	fmt.Print(ansi.Dim(prediction[len(f.Value):]))
 	ansi.CursorRestorePos()
 }
 
 // Handler for when user presses "ENTER" or "RETURN", returns focused item.
-func (s *search) makeSelection() string {
-	if len(s.Matches) > 0 {
-		return s.Matches[s.Selected].Str
+func (f *fsac) makeSelection() string {
+	if len(f.Matches) > 0 {
+		return f.Matches[f.Selected].Str
 	} else {
-		return s.Items[s.Selected]
+		return f.Items[f.Selected]
 	}
 }
