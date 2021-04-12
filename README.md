@@ -18,7 +18,7 @@ Make sure you have <a href="https://golang.org/dl/">Go</a> installed.
 **Option 1**:
 `git clone` this repo and from the project's root directory:
 ```
-$ make compile_dirsearch dest=path/to/my/bin.
+$ make compile_dirsearch dest=path/to/my/bin_name
 ```
 Make sure that the executable is in your `$PATH`.
 
