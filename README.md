@@ -9,11 +9,16 @@ Make sure you have <a href="https://golang.org/dl/">Go</a> installed.
 
 **Option 1**:
 `git clone` this repo and from the project's root directory:
-`$ make compile_dirsearch dest=path/to/my/bin`.
+```
+$ make compile_dirsearch dest=path/to/my/bin.
+```
 Make sure that the executable is in your `$PATH`.
 
 **Option 2**:
-Make sure you `$GOPATH` is set, then run `go get github.com/solidiquis/fsac/cmd/dirf`. 
+Make sure you `$GOPATH` is set, then run: 
+```
+$ go get github.com/solidiquis/fsac/cmd/dirf
+``` 
 
 ## Wish to contribute by making an fsac program?
 Again, this repo will contain a collection of programs which can be compiled independently. Here are the steps to follow if you wish to contribute:
