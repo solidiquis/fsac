@@ -41,4 +41,6 @@ Again, this repo will contain a collection of programs which can be compiled ind
 ## Libraries that made this possible
 - https://github.com/sahilm/fuzzy: Awesome string matching algorithm.
 - https://github.com/solidiquis/ansigo: Convenient Go-wrapper for various ANSI escapes + keypress detection.
-- 
+
+## License
+<a href="https://github.com/solidiquis/fsac/blob/master/LICENSE">MIT</a>
