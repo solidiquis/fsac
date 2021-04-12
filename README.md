@@ -46,7 +46,7 @@ Again, this repo will contain a collection of programs which can be compiled ind
 ```
 4. Add three new targets to the `Makefile`, using `dirf` as a template: `run`, `debug`, & `compile`.
 
-## Libraries that made this possible
+## Libraries used
 - https://github.com/sahilm/fuzzy: Awesome string matching algorithm.
 - https://github.com/solidiquis/ansigo: Convenient Go-wrapper for various ANSI escapes + keypress detection.
 
