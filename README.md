@@ -31,7 +31,7 @@ $ go get github.com/solidiquis/fsac/cmd/dirf
 ## Wish to contribute by making an fsac program?
 Again, this repo will contain a collection of programs which can be compiled independently. Here are the steps to follow if you wish to contribute:
 1. Make a new directory in `cmd/` named after your program.
-2. Make your program and give it a short catchy name, kind of like `grep` and how it's short for `global regular expression print`.
+2. Make your program and give it a short catchy name, kind of like `grep`, which is short for `global regular expression print`.
 3. Add something like this to the top of your `main.go`:
 ```
 // Installation:
@@ -44,7 +44,7 @@ Again, this repo will contain a collection of programs which can be compiled ind
 // Searches through directory tree from working directory and
 // copies selection to clipboard.
 ```
-4. Add three new targets to the makefile, using `dirf` as a template: `run`, `debug`, & `compile`.
+4. Add three new targets to the `Makefile`, using `dirf` as a template: `run`, `debug`, & `compile`.
 
 ## Libraries that made this possible
 - https://github.com/sahilm/fuzzy: Awesome string matching algorithm.
