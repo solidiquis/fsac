@@ -56,7 +56,7 @@ func InitFsac(promptTxt string, done chan string) *fsac {
 
 	winCol, winRow, err := ansi.TerminalDimensions()
 	if err != nil {
-		log.Fatalln("Unable to retrieve window dimensionf.")
+		log.Fatalln("Unable to retrieve window dimensions.")
 	}
 
 	prompt := fmt.Sprintf("%s: ", promptTxt)

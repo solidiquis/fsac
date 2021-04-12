@@ -63,10 +63,22 @@ func e(err string, t *testing.T) {
 }
 
 func fsacSetup() *fsac {
-	prompt := "Directory: "
 	done := make(chan string, 1)
-	fsac := InitFsac(prompt, done)
-	fsac.SetItems([]string{
+	prompt := "Directory: "
+
+	search := &fsac{
+		Prompt:   prompt,
+		Value:    "",
+		Guess:    "",
+		StartCol: len(prompt) + 1,
+		StartRow: 1,
+		Selected: 0,
+		WinCol:   50,
+		WinRow:   50,
+		doneChan: done,
+	}
+
+	search.SetItems([]string{
 		"cthulhu",
 		"nyarlathotep",
 		"yog-sothoth",
@@ -75,5 +87,5 @@ func fsacSetup() *fsac {
 		"shoggoth",
 	})
 
-	return fsac
+	return search
 }
