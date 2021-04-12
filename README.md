@@ -7,7 +7,7 @@
   <img src="https://github.com/solidiquis/fsac/workflows/Go/badge.svg" alt="Build Status">
 </a>
 
-Lightning fast scrollable **f**uzzy **s**earch utility for the terminal, the result of which can be easily provided as an **a**rgument to a custom **c**ommand - comes with tab autocomplete! This repo is intended to contain a collection of applications that make use of **fsac**, so contributing is highly encouraged :] 
+Lightning fast scrollable (**f**)uzzy (**s**)earch utility for the terminal, the result of which can be easily provided as an (**a**)rgument to a custom (**c**)ommand - comes with tab autocomplete! This repo is intended to contain a collection of applications that make use of **fsac**, so contributing is highly encouraged :] 
 
 <img height="auto" width="75%" src="https://github.com/solidiquis/solidiquis/blob/master/assets/fsac_demo.gif">
 
