@@ -105,7 +105,7 @@ func (f *fsac) Render(key string) {
 		return
 	}
 
-	// Autocomplete goodnesf.
+	// Autocomplete goodness.
 	var prediction string
 
 	if match := fuzzy.Find(f.Value, f.Items); len(match) > 0 {
@@ -137,7 +137,7 @@ func (f *fsac) SetItems(items []string) {
 }
 
 // Renders a list of all the potential items that match user input, taking into
-// account the window dimesions, using a sliding window to handle overflow.
+// account the window dimensions, using a sliding window to handle overflow.
 func (f *fsac) RenderMatches() {
 	ansi.CursorSavePos()
 	ansi.CursorHome()
